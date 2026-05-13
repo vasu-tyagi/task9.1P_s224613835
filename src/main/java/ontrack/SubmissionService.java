@@ -12,7 +12,7 @@ public class SubmissionService {
         validateStudentId(studentId);
         validateTaskId(taskId);
         validateAttachments(attachments);
-        return new Submission("accepted");
+        return new Submission("accepted", studentId, taskId, attachments);
     }
 
     private void validateStudentId(String studentId) {
