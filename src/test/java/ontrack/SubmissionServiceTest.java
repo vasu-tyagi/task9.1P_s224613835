@@ -68,4 +68,40 @@ class SubmissionServiceTest {
         );
         assertTrue(ex.getMessage().contains("attachments"));
     }
+
+    @Test
+    @DisplayName("Cycle 3 RED: accepted submission returns full payload")
+    void testAcceptedSubmissionReturnsFullPayload() {
+        // Arrange
+        SubmissionService service = new SubmissionService();
+
+        // Act
+        Submission result = service.submitTask(
+            "s12345",
+            "SIT707-9.1P",
+            List.of("report.pdf", "code.zip")
+        );
+
+        // Assert
+        assertEquals("accepted", result.getStatus());
+        assertEquals("s12345", result.getStudentId());
+        assertEquals("SIT707-9.1P", result.getTaskId());
+        assertEquals(List.of("report.pdf", "code.zip"), result.getAttachments());
+        assertNotNull(result.getSubmissionId());
+        assertNotNull(result.getTimestamp());
+    }
+
+    @Test
+    @DisplayName("Cycle 3 RED: each submission has a unique submission id")
+    void testEachSubmissionHasUniqueId() {
+        // Arrange
+        SubmissionService service = new SubmissionService();
+
+        // Act
+        Submission first = service.submitTask("s12345", "SIT707-9.1P", List.of("a.pdf"));
+        Submission second = service.submitTask("s12345", "SIT707-9.1P", List.of("a.pdf"));
+
+        // Assert
+        assertNotEquals(first.getSubmissionId(), second.getSubmissionId());
+    }
 }
